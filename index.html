@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IFS 1243 Daybreak PDK — Process &amp; Device Summary</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 1rem; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #24292f;
+  background: #fff;
+  line-height: 1.6;
+  display: flex;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 300px;
+  height: 100vh;
+  overflow-y: auto;
+  background: #f6f8fa;
+  border-right: 1px solid #d0d7de;
+  padding: 16px 0;
+  font-size: 13px;
+}
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: #c1c8cf; border-radius: 3px; }
+
+.sidebar ul { list-style: none; }
+
+/* L1: Part I / Part II */
+.sidebar > nav > ul > li { margin-bottom: 4px; }
+
+.sidebar > nav > ul > li > a {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #1f2328;
+  text-decoration: none;
+  cursor: pointer;
+}
+.sidebar > nav > ul > li > a::before {
+  content: "\25BC";
+  display: inline-block;
+  width: 18px;
+  font-size: 12px;
+  color: #656d76;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.sidebar > nav > ul > li.collapsed > a::before {
+  transform: rotate(-90deg);
+}
+
+.sidebar > nav > ul > li > ul {
+  padding-left: 0;
+  overflow: hidden;
+  max-height: 2000px;
+  transition: max-height 0.25s ease;
+}
+.sidebar > nav > ul > li.collapsed > ul {
+  max-height: 0;
+}
+
+/* L2: h3 sections */
+.sidebar > nav > ul > li > ul > li > a {
+  display: flex;
+  align-items: center;
+  padding: 3px 16px 3px 28px;
+  color: #656d76;
+  text-decoration: none;
+  font-size: 13px;
+  border-left: 2px solid transparent;
+}
+.sidebar > nav > ul > li > ul > li:has(> ul) > a::before {
+  content: "\25BC";
+  display: inline-block;
+  width: 16px;
+  font-size: 11px;
+  color: #656d76;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.sidebar > nav > ul > li > ul > li.collapsed > a::before {
+  transform: rotate(-90deg);
+}
+.sidebar > nav > ul > li > ul > li > a:hover {
+  color: #0969da;
+  background: #eaeef2;
+}
+.sidebar > nav > ul > li > ul > li > a.active {
+  color: #0969da;
+  border-left-color: #0969da;
+  font-weight: 600;
+  background: #ddf4ff;
+}
+
+/* L3: h4 sub-sections */
+.sidebar > nav > ul > li > ul > li > ul {
+  padding-left: 0;
+  overflow: hidden;
+  max-height: 1000px;
+  transition: max-height 0.2s ease;
+}
+.sidebar > nav > ul > li > ul > li.collapsed > ul {
+  max-height: 0;
+}
+.sidebar > nav > ul > li > ul > li > ul > li > a {
+  display: block;
+  padding: 2px 16px 2px 52px;
+  color: #848d97;
+  text-decoration: none;
+  font-size: 12px;
+}
+.sidebar > nav > ul > li > ul > li > ul > li > a:hover {
+  color: #0969da;
+  background: #eaeef2;
+}
+.sidebar > nav > ul > li > ul > li > ul > li > a.active {
+  color: #0969da;
+  font-weight: 600;
+}
+
+/* ---- Content ---- */
+.content {
+  margin-left: 300px;
+  padding: 32px 40px 80px;
+  max-width: 860px;
+  width: 100%;
+}
+
+.content h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #1f2328;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #d0d7de;
+  margin: 2em 0 0.8em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #1f2328;
+  margin: 1.5em 0 0.5em;
+}
+
+.content h4 {
+  font-size: 1em;
+  font-weight: 600;
+  color: #57606a;
+  margin: 1.2em 0 0.4em;
+}
+
+.content p {
+  margin: 0.5em 0;
+  font-size: 14px;
+}
+
+.content em {
+  color: #57606a;
+  font-size: 13px;
+}
+
+.content strong { font-weight: 600; }
+
+.content hr {
+  border: none;
+  border-top: 1px solid #d0d7de;
+  margin: 2em 0;
+}
+
+/* ---- Tables ---- */
+.content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  margin: 8px 0 16px;
+  display: table;
+}
+
+/* Featured table (Available Devices Summary) */
+.content table.featured {
+  border: 2px solid #0969da;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(9,105,218,0.1);
+}
+.content table.featured thead th {
+  background: #0969da;
+  color: #fff;
+  border-color: #0969da;
+  font-size: 13px;
+}
+.content table.featured tbody td {
+  border-color: #c8d8e8;
+}
+.content table.featured tbody tr:nth-child(even) {
+  background: #f0f6ff;
+}
+.content table.featured tbody tr:hover {
+  background: #dbeafe;
+}
+.content thead th {
+  background: #f6f8fa;
+  color: #1f2328;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 12px;
+  border: 1px solid #d0d7de;
+  text-align: left;
+}
+.content tbody td {
+  padding: 6px 12px;
+  border: 1px solid #d0d7de;
+  vertical-align: top;
+}
+.content tbody tr:hover { background: #f6f8fa; }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .sidebar { position: relative; width: 100%; height: auto; max-height: 50vh; border-right: none; border-bottom: 1px solid #d0d7de; }
+  body { flex-direction: column; }
+  .content { margin-left: 0; padding: 20px 16px; }
+}
+@media print {
+  .sidebar { display: none; }
+  .content { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <nav><ul>
+<li><a href="#part-i-process-data" id="toc-part-i-process-data">Part I —
+Process Data</a>
+<ul>
+<li><a href="#silicon-waveguide-platforms"
+id="toc-silicon-waveguide-platforms">Silicon Waveguide
+Platforms</a></li>
+<li><a href="#laser-grating-grt" id="toc-laser-grating-grt">Laser
+Grating (GRT)</a></li>
+<li><a href="#iii-v-epitaxial-stack"
+id="toc-iii-v-epitaxial-stack">III-V Epitaxial Stack</a></li>
+<li><a href="#physical-interface" id="toc-physical-interface">Physical
+Interface</a></li>
+<li><a href="#metal-stack-contacts" id="toc-metal-stack-contacts">Metal
+Stack &amp; Contacts</a></li>
+<li><a href="#metal-routing" id="toc-metal-routing-p1">Metal
+Routing</a></li>
+<li><a href="#implant-layers" id="toc-implant-layers">Implant
+Layers</a></li>
+</ul></li>
+<li><a href="#part-ii-device-performance-data"
+id="toc-part-ii-device-performance-data">Part II — Device Performance
+Data</a>
+<ul>
+<li><a href="#available-devices-summary"
+id="toc-available-devices-summary">Available Devices Summary</a></li>
+<li><a href="#laser-bb" id="toc-laser-bb">Laser (BB)</a></li>
+<li><a href="#soa-bb" id="toc-soa-bb">SOA (BB)</a></li>
+<li><a href="#ge-waveguide-photodetector-wb"
+id="toc-ge-waveguide-photodetector-wb">Ge Waveguide Photodetector
+(WB)</a></li>
+<li><a href="#iii-v-waveguide-photodetector-bb"
+id="toc-iii-v-waveguide-photodetector-bb">III-V Waveguide Photodetector
+(BB)</a></li>
+<li><a href="#twe-mach-zehnder-modulator-wb"
+id="toc-twe-mach-zehnder-modulator-wb">TWE Mach-Zehnder Modulator
+(WB)</a></li>
+<li><a href="#variable-optical-attenuator-wb"
+id="toc-variable-optical-attenuator-wb">Variable Optical Attenuator
+(WB)</a></li>
+<li><a href="#linear-heater-phase-shifter-wb"
+id="toc-linear-heater-phase-shifter-wb">Linear Heater / Phase Shifter
+(WB)</a></li>
+<li><a href="#micro-ring-resonator-with-thermal-phase-shifter-wb"
+id="toc-micro-ring-resonator-with-thermal-phase-shifter-wb">Micro-Ring
+Resonator with Thermal Phase Shifter (WB)</a></li>
+<li><a href="#mim-capacitor-wb" id="toc-mim-capacitor-wb">MIM Capacitor
+(WB)</a></li>
+<li><a href="#silicon-resistor-wb" id="toc-silicon-resistor-wb">Silicon
+Resistor (WB)</a></li>
+<li><a href="#silicon-contact-resistance-wb"
+id="toc-silicon-contact-resistance-wb">Silicon Contact Resistance
+(WB)</a></li>
+<li><a href="#temperature-sensor-diode-wb"
+id="toc-temperature-sensor-diode-wb">Temperature Sensor Diode
+(WB)</a></li>
+<li><a href="#passive-optical-components"
+id="toc-passive-optical-components">Passive Optical Components</a>
+<ul>
+<li><a href="#waveguide-straight" id="toc-waveguide-straight">Waveguide
+Straight</a></li>
+<li><a href="#waveguide-bends" id="toc-waveguide-bends">Waveguide
+Bends</a></li>
+<li><a href="#couplers-splitters" id="toc-couplers-splitters">Couplers /
+Splitters</a></li>
+<li><a href="#platform-tapers-mode-converters"
+id="toc-platform-tapers-mode-converters">Platform Tapers &amp; Mode
+Converters</a></li>
+<li><a href="#sin-waveguide-tapers-bb"
+id="toc-sin-waveguide-tapers-bb">SiN Waveguide Tapers (BB)</a></li>
+<li><a href="#external-couplers" id="toc-external-couplers">External
+Couplers</a></li>
+<li><a href="#si-echelle-mux-4-channel-wb"
+id="toc-si-echelle-mux-4-channel-wb">Si Echelle MUX (4-Channel,
+WB)</a></li>
+</ul></li>
+</ul></li>
+</ul></nav>
+</div>
+<div class="content">
+<h2 id="part-i-process-data">Part I — Process Data</h2>
+<h3 id="silicon-waveguide-platforms">Silicon Waveguide Platforms</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 24%" />
+<col style="width: 27%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">400/200 RIB</th>
+<th style="text-align: center;">200/50 ET2/RB2</th>
+<th style="text-align: center;">200/0 IT1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary use</td>
+<td style="text-align: center;">Routing, passives, under InP</td>
+<td style="text-align: center;">PN modulation, add-drop filters</td>
+<td style="text-align: center;">Optical/electrical isolation</td>
+</tr>
+<tr>
+<td>WG height</td>
+<td style="text-align: center;">386 +/- 1.5 nm (1σ)</td>
+<td style="text-align: center;">188 +/- 2.7 nm (1σ)</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Slab height</td>
+<td style="text-align: center;">197 +/- 2.1 nm (1σ)</td>
+<td style="text-align: center;">38 +/- 2.6 nm (1σ)</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Etch depth</td>
+<td style="text-align: center;">189 +/- 2.2 nm (1σ)</td>
+<td style="text-align: center;">150 +/- 3.2 nm (1σ)</td>
+<td style="text-align: center;">~260 nm (to BOX)</td>
+</tr>
+<tr>
+<td>Loss @ 1310 nm (400 nm WG)</td>
+<td style="text-align: center;">0.69 +/- 0.23 dB/cm (1σ)</td>
+<td style="text-align: center;">1.16 +/- 0.3 dB/cm (1σ)</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Loss @ 1310 nm (1 um WG)</td>
+<td style="text-align: center;">0.23 +/- 0.08 dB/cm (1σ)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Min tip width</td>
+<td style="text-align: center;">50 nm</td>
+<td style="text-align: center;">150 nm</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Min gap</td>
+<td style="text-align: center;">140 nm</td>
+<td style="text-align: center;">150 nm</td>
+<td style="text-align: center;">40 nm</td>
+</tr>
+<tr>
+<td>Dataset</td>
+<td style="text-align: center;">1,035 wafers / 9 months</td>
+<td style="text-align: center;">1,035 wafers / 9 months</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Component Overview Apr 2026</em></p>
+<h3 id="laser-grating-grt">Laser Grating (GRT)</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 19%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grating etch depth</td>
+<td>~26 +/- 1.4 nm</td>
+<td>N=280 site-level, 140 wafers, 19 lots</td>
+</tr>
+<tr>
+<td>GRT depth (drawn)</td>
+<td>32 nm</td>
+<td>Design target</td>
+</tr>
+<tr>
+<td>Gap FCCD</td>
+<td>285 +/- 4.2 nm</td>
+<td>Drawn 200 nm, bias +85 nm. N=260, 19 wafers/19 lots</td>
+</tr>
+<tr>
+<td>Line FCCD</td>
+<td>102 nm</td>
+<td>Drawn 102 nm, zero bias. Sigma unknown</td>
+</tr>
+<tr>
+<td>Min pitch</td>
+<td>&gt; 190 nm</td>
+<td></td>
+</tr>
+<tr>
+<td>Min width</td>
+<td>&gt;= 50 nm</td>
+<td></td>
+</tr>
+<tr>
+<td>Min spacing</td>
+<td>&gt;= 50 nm</td>
+<td></td>
+</tr>
+<tr>
+<td>Max aspect ratio (L/S)</td>
+<td>&lt; 7</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Generic Laser PDK REV1, Laser Design Rules</em></p>
+<h3 id="iii-v-epitaxial-stack">III-V Epitaxial Stack</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 20%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Thickness</th>
+<th>Process Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-InGaAs (contact)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>P-InP (cladding)</td>
+<td>~1.75 um</td>
+<td>DEM dry etch, ~70 deg sidewall</td>
+</tr>
+<tr>
+<td>InAlGaAs (active)</td>
+<td>~0.43 um</td>
+<td>WEM wet etch (lateral undercut ~0.6 um/side)</td>
+</tr>
+<tr>
+<td>N-InP / InGaAsP</td>
+<td>~0.15 um</td>
+<td>NIP dry/wet to Si</td>
+</tr>
+<tr>
+<td>Bonding oxide</td>
+<td>~10 nm</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Total III-V</strong></td>
+<td><strong>~2.2 um</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Generic Laser PDK REV1</em></p>
+<h3 id="physical-interface">Physical Interface</h3>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SOI wafer thickness</td>
+<td>790 +/- 10 um</td>
+</tr>
+<tr>
+<td>BOX thickness</td>
+<td>1 um</td>
+</tr>
+<tr>
+<td>WLBI pad</td>
+<td>150 x 150 um (min pitch 420 um)</td>
+</tr>
+<tr>
+<td>Wire-bond pad</td>
+<td>121 x 93 um</td>
+</tr>
+<tr>
+<td>InP chiplet options</td>
+<td>1.8 mm x (1.0 / 2.2 / 2.7 mm), up to 2 per vehicle</td>
+</tr>
+<tr>
+<td>Min InP chiplet spacing</td>
+<td>300 um</td>
+</tr>
+<tr>
+<td>Min laser pitch</td>
+<td>250 um</td>
+</tr>
+<tr>
+<td>Reticle usable area</td>
+<td>24.5 x 32.2 mm</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Black Box Detail and Interfaces</em></p>
+<h3 id="metal-stack-contacts">Metal Stack &amp; Contacts</h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 5%" />
+<col style="width: 14%" />
+<col style="width: 24%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>GDS</th>
+<th>Type</th>
+<th>Width</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W1</td>
+<td>CON</td>
+<td>Tungsten</td>
+<td>1.0 – 1.45 um</td>
+<td>1.2 um height, silicide</td>
+</tr>
+<tr>
+<td>W2</td>
+<td>CO2</td>
+<td>Tungsten</td>
+<td>1.0 um fixed</td>
+<td>Min length 2.0 um</td>
+</tr>
+<tr>
+<td>W3</td>
+<td>CO3</td>
+<td>Tungsten</td>
+<td>0.8 um fixed</td>
+<td>MIMCAP contacts</td>
+</tr>
+<tr>
+<td>Metal 1</td>
+<td>M1E</td>
+<td>Aluminum</td>
+<td>—</td>
+<td>Routing</td>
+</tr>
+<tr>
+<td>Via</td>
+<td>VIA</td>
+<td>—</td>
+<td>—</td>
+<td>M1E to MT2</td>
+</tr>
+<tr>
+<td>Metal 2</td>
+<td>MT2</td>
+<td>Aluminum</td>
+<td>—</td>
+<td>3 um thick, top routing</td>
+</tr>
+<tr>
+<td>Pad</td>
+<td>WPS</td>
+<td>—</td>
+<td>—</td>
+<td>Opens dielectric over MT2</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Component Overview Apr 2026, Primary Process Design
+Rules</em></p>
+<h3 id="metal-routing">Metal Routing</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Specs Provided</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 (M1E)</td>
+<td>Max current density, sheet resistance, EM</td>
+</tr>
+<tr>
+<td>M2 (MT2)</td>
+<td>Max current density, sheet resistance, EM</td>
+</tr>
+<tr>
+<td>VIA</td>
+<td>Resistance/VIA, EM</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Customer Cell Offerings</em></p>
+<h3 id="implant-layers">Implant Layers</h3>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 3%" />
+<col style="width: 6%" />
+<col style="width: 26%" />
+<col style="width: 6%" />
+<col style="width: 4%" />
+<col style="width: 16%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Type</th>
+<th>Species</th>
+<th>Dose (cm-2)</th>
+<th>Energy</th>
+<th>Tilt</th>
+<th>Region</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SUBD</td>
+<td>n</td>
+<td>P</td>
+<td>1.19e15</td>
+<td>50 keV</td>
+<td>0</td>
+<td>Any (outside pool)</td>
+<td>Ge PD n-contact</td>
+</tr>
+<tr>
+<td>PDO</td>
+<td>p</td>
+<td>B</td>
+<td>1e13 (100G) / 7.5e12 (200G)</td>
+<td>100 keV</td>
+<td>0</td>
+<td>Any</td>
+<td>PN junction</td>
+</tr>
+<tr>
+<td>BAI</td>
+<td>n+</td>
+<td>P</td>
+<td>8.0e15</td>
+<td>30 keV</td>
+<td>0</td>
+<td>RIB only</td>
+<td>WG termination, Ge PD ohmic</td>
+</tr>
+<tr>
+<td>N1I</td>
+<td>n-</td>
+<td>As</td>
+<td>3e13 (100G) / 2.25e13 (200G)</td>
+<td>50 keV</td>
+<td>+/-45</td>
+<td>RB2 only</td>
+<td>PN junction (tilted)</td>
+</tr>
+<tr>
+<td>N1I</td>
+<td>n-</td>
+<td>As</td>
+<td>6e12</td>
+<td>100 keV</td>
+<td>0</td>
+<td>RB2 only</td>
+<td>PN junction (normal)</td>
+</tr>
+<tr>
+<td>PD2</td>
+<td>p-</td>
+<td>B</td>
+<td>8e12</td>
+<td>7 keV</td>
+<td>0</td>
+<td>RB2 only</td>
+<td>PN junction</td>
+</tr>
+<tr>
+<td>PS3</td>
+<td>p</td>
+<td>B</td>
+<td>1.08e14</td>
+<td>7 keV</td>
+<td>0</td>
+<td>RB2 only</td>
+<td>PN junction adjust</td>
+</tr>
+<tr>
+<td>NS3</td>
+<td>n</td>
+<td>P</td>
+<td>1.08e14</td>
+<td>68 keV</td>
+<td>0</td>
+<td>Any (outside pool)</td>
+<td>PN junction adjust</td>
+</tr>
+<tr>
+<td>PPL</td>
+<td>p+</td>
+<td>B</td>
+<td>8.1e15</td>
+<td>7 keV</td>
+<td>0</td>
+<td>Any (outside pool)</td>
+<td>P-side ohmic contact</td>
+</tr>
+<tr>
+<td>NPL</td>
+<td>n+</td>
+<td>P</td>
+<td>5.7e15</td>
+<td>20 keV</td>
+<td>0</td>
+<td>Any (outside pool)</td>
+<td>N-side ohmic, stray light absorb</td>
+</tr>
+</tbody>
+</table>
+<p>SUBD &amp; PDO annealed at 1050 C / 2 hrs. Implant min width &gt;= 1
+um, min space &gt;= 1 um.</p>
+<p><em>Source: Component Overview Apr 2026</em></p>
+<hr />
+<h2 id="part-ii-device-performance-data">Part II — Device Performance
+Data</h2>
+<p>Cell type: <strong>BB</strong> = Black Box (layout not visible),
+<strong>WB</strong> = White Box (customer-editable). Statistical data
+(Median/Sigma/Cpk) from Customer Cell Offerings Apr 2026 where
+available.</p>
+<h3 id="available-devices-summary">Available Devices Summary</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 2%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Device</th>
+<th style="text-align: center;">Type</th>
+<th>Wavelengths / Variants</th>
+<th>Key Specs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Active — III-V</strong></td>
+<td>Laser</td>
+<td style="text-align: center;">BB</td>
+<td>1270 / 1290 / 1310 / 1330 nm, 25 mW &amp; 35 mW</td>
+<td>FBT, wavelength error, I_bias, V_LZR</td>
+</tr>
+<tr>
+<td></td>
+<td>SOA (Tx)</td>
+<td style="text-align: center;">BB</td>
+<td>1290 – 1310 nm</td>
+<td>Gain 5 – 14.5 dB, Pout 13 dBm, NF 8 dB</td>
+</tr>
+<tr>
+<td></td>
+<td>SOA (Rx)</td>
+<td style="text-align: center;">BB</td>
+<td>1290 – 1310 nm</td>
+<td>Gain 5 dB, Pout 5 dBm, NF 8 dB</td>
+</tr>
+<tr>
+<td></td>
+<td>III-V WGPD</td>
+<td style="text-align: center;">BB</td>
+<td>O-band</td>
+<td>Responsivity, dark current</td>
+</tr>
+<tr>
+<td><strong>Active — Si/Ge</strong></td>
+<td>Ge WGPD</td>
+<td style="text-align: center;">WB</td>
+<td>1260 – 1340 nm</td>
+<td>Resp 0.95 A/W, BW ~40 GHz, Idark &lt; 1 uA</td>
+</tr>
+<tr>
+<td></td>
+<td>TWE MZI (200G)</td>
+<td style="text-align: center;">WB</td>
+<td>O-band</td>
+<td>BW 42 – 45 GHz, VpiL 2.35 V*cm</td>
+</tr>
+<tr>
+<td></td>
+<td>TWE MZI (100G)</td>
+<td style="text-align: center;">WB</td>
+<td>O-band</td>
+<td>BW 32 GHz, VpiL 1.91 V*cm</td>
+</tr>
+<tr>
+<td></td>
+<td>VOA</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1338 nm</td>
+<td>Max atten 25 dB, loss ~0 (no bias)</td>
+</tr>
+<tr>
+<td></td>
+<td>Linear Heater (Z200)</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>Power/pi &lt;= 10 mW, R ~145 Ohm</td>
+</tr>
+<tr>
+<td></td>
+<td>Linear Heater (Z400)</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>50 um &amp; 100 um variants, R 91 – 145 Ohm</td>
+</tr>
+<tr>
+<td></td>
+<td>MRR + Thermal Tuner</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>R = 3 / 6 / 10 um, FSR, Q, heater</td>
+</tr>
+<tr>
+<td></td>
+<td>Temp Sensor Diode</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>dV/dT 1.35 mV/C, response &lt;= 500</td>
+</tr>
+<tr>
+<td><strong>Passive</strong></td>
+<td>Si RIB WG (400/200)</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1337 nm</td>
+<td>Loss 0.23 dB/cm (1 um), 0.69 dB/cm (0.4 um)</td>
+</tr>
+<tr>
+<td></td>
+<td>Si RIB WG (200/50)</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1337 nm</td>
+<td>Loss 1.16 dB/cm (0.4 um)</td>
+</tr>
+<tr>
+<td></td>
+<td>Si Channel WG (200/0)</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1337 nm</td>
+<td>Isolation use</td>
+</tr>
+<tr>
+<td></td>
+<td>WG Bends</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>R_min 40 um (1 um), 70 um (0.4 um)</td>
+</tr>
+<tr>
+<td></td>
+<td>Directional Coupler (Tap)</td>
+<td style="text-align: center;">WB</td>
+<td>1290 – 1310 nm</td>
+<td>2% / 5% / 8% split</td>
+</tr>
+<tr>
+<td></td>
+<td>1x2 MMI</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1337 nm</td>
+<td>50:50, loss 0.1 dB</td>
+</tr>
+<tr>
+<td></td>
+<td>2x2 MMI</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1337 nm</td>
+<td>50:50, loss 0.1 dB</td>
+</tr>
+<tr>
+<td></td>
+<td>aMMI 80/20</td>
+<td style="text-align: center;">WB</td>
+<td>1290 – 1310 nm</td>
+<td>80:20, loss 0.1 dB</td>
+</tr>
+<tr>
+<td></td>
+<td>Platform Tapers</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>ET2↔︎RIB, 400/200↔︎200/0, 1um↔︎0.4um</td>
+</tr>
+<tr>
+<td></td>
+<td>SiN WG Tapers</td>
+<td style="text-align: center;">BB</td>
+<td>—</td>
+<td>Si↔︎HNA SiN, HNA↔︎LNA SiN (TE/TM)</td>
+</tr>
+<tr>
+<td></td>
+<td>LNA Coupler</td>
+<td style="text-align: center;">BB</td>
+<td>—</td>
+<td>Loss 0.4 dB, NA 0.9x0.125</td>
+</tr>
+<tr>
+<td></td>
+<td>Grating Coupler</td>
+<td style="text-align: center;">WB</td>
+<td>1270 / 1290 / 1310 / 1330 nm</td>
+<td>Per-wavelength designs</td>
+</tr>
+<tr>
+<td></td>
+<td>Si Echelle MUX (4-ch)</td>
+<td style="text-align: center;">WB</td>
+<td>1264 – 1337 nm</td>
+<td>IL &lt;= 3 dB, 1dB BW 6 nm</td>
+</tr>
+<tr>
+<td><strong>Electrical</strong></td>
+<td>MIMCAP</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>0.454 fF/um2, Vbd &gt; 100 V</td>
+</tr>
+<tr>
+<td></td>
+<td>Si Resistor (N-type)</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>Z200 &amp; Z400, sheet R 13 – 29 Ohm/sq</td>
+</tr>
+<tr>
+<td></td>
+<td>Si Resistor (P-type)</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>Z200 &amp; Z400, sheet R 26 – 55 Ohm/sq</td>
+</tr>
+<tr>
+<td></td>
+<td>Si Contacts (N/P)</td>
+<td style="text-align: center;">WB</td>
+<td>—</td>
+<td>Z200 / Z400, R_con 26 – 39 Ohm</td>
+</tr>
+<tr>
+<td></td>
+<td>Metal Routing</td>
+<td style="text-align: center;">—</td>
+<td>—</td>
+<td>M1 (Al), M2 (Al), VIA</td>
+</tr>
+</tbody>
+</table>
+<h3 id="laser-bb">Laser (BB)</h3>
+<p>Available at 1270, 1290, 1310, 1330 nm in both 25 mW and 35 mW
+variants.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">35 mW Source</th>
+<th style="text-align: center;">25 mW Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCell</td>
+<td style="text-align: center;">LASER_D0/D1/D2/D3</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td style="text-align: center;">0 – 80 C</td>
+<td style="text-align: center;">20 – 70 C</td>
+</tr>
+<tr>
+<td>Wavelength</td>
+<td style="text-align: center;">1268 – 1338 nm</td>
+<td style="text-align: center;">1294 – 1310 nm</td>
+</tr>
+<tr>
+<td>Operating voltage</td>
+<td style="text-align: center;">1.68 V @ 228 mA</td>
+<td style="text-align: center;">1.57 V @ 177 mA</td>
+</tr>
+<tr>
+<td>Post-BI current</td>
+<td style="text-align: center;">&lt;= 207 mA</td>
+<td style="text-align: center;">&lt;= 161 mA</td>
+</tr>
+<tr>
+<td>EOL current</td>
+<td style="text-align: center;">&lt;= 228 mA</td>
+<td style="text-align: center;">&lt;= 177 mA</td>
+</tr>
+<tr>
+<td>Power output</td>
+<td style="text-align: center;">35 mW</td>
+<td style="text-align: center;">25 mW</td>
+</tr>
+<tr>
+<td>Wavelength error</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">15 GHz (0.084 nm)</td>
+</tr>
+<tr>
+<td>Feedback tolerance (mean RL)</td>
+<td style="text-align: center;">-32.5 dB</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Feedback tolerance (max RL)</td>
+<td style="text-align: center;">-24 dB</td>
+<td style="text-align: center;">-22 dB</td>
+</tr>
+<tr>
+<td>I_bias non-uniformity</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">30 mA</td>
+</tr>
+<tr>
+<td>I_bias drift post/pre</td>
+<td style="text-align: center;">0.25</td>
+<td style="text-align: center;">0.25</td>
+</tr>
+<tr>
+<td>V_LZR delta post-pre</td>
+<td style="text-align: center;">-0.015 V</td>
+<td style="text-align: center;">-0.015 V</td>
+</tr>
+</tbody>
+</table>
+<p><strong>1310 nm 35 mW statistical data (pre-burn-in):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>LSL</th>
+<th>Median</th>
+<th>Sigma</th>
+<th>USL</th>
+<th>Cpk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I_bias for 35 mW (A)</td>
+<td>0.133</td>
+<td>0.163</td>
+<td>0.006</td>
+<td>0.194</td>
+<td>1.66</td>
+</tr>
+<tr>
+<td>V_LZR @ 228 mA (V)</td>
+<td>1.45</td>
+<td>1.66</td>
+<td>0.36</td>
+<td>1.84</td>
+<td>1.66</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Device Library, Customer Cell Offerings</em></p>
+<h3 id="soa-bb">SOA (BB)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">Tx SOA</th>
+<th style="text-align: center;">Rx SOA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCell</td>
+<td style="text-align: center;">SOA_450_0p5_DEM12_v2</td>
+<td style="text-align: center;">SOA_350_0p5_DEM10_v2</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td style="text-align: center;">20 – 70 C</td>
+<td style="text-align: center;">20 – 70 C</td>
+</tr>
+<tr>
+<td>Wavelength</td>
+<td style="text-align: center;">1290 – 1310 nm</td>
+<td style="text-align: center;">1290 – 1310 nm</td>
+</tr>
+<tr>
+<td>Operating voltage</td>
+<td style="text-align: center;">&lt;= 1.8 V</td>
+<td style="text-align: center;">&lt;= 1.8 V</td>
+</tr>
+<tr>
+<td>Post-BI current</td>
+<td style="text-align: center;">&lt;= 120 mA</td>
+<td style="text-align: center;">&lt;= 100 mA</td>
+</tr>
+<tr>
+<td>EOL current</td>
+<td style="text-align: center;">&lt;= 150 mA</td>
+<td style="text-align: center;">&lt;= 120 mA</td>
+</tr>
+<tr>
+<td>Gain</td>
+<td style="text-align: center;">5 – 14.5 dB</td>
+<td style="text-align: center;">5 dB</td>
+</tr>
+<tr>
+<td>Gain uniformity</td>
+<td style="text-align: center;">1.5 – 2 dB</td>
+<td style="text-align: center;">1.5 – 2 dB</td>
+</tr>
+<tr>
+<td>P_out</td>
+<td style="text-align: center;">13 dBm</td>
+<td style="text-align: center;">5 dBm</td>
+</tr>
+<tr>
+<td>Gain compression</td>
+<td style="text-align: center;">3 dB</td>
+<td style="text-align: center;">1 dB</td>
+</tr>
+<tr>
+<td>Noise figure</td>
+<td style="text-align: center;">8 dB</td>
+<td style="text-align: center;">8 dB</td>
+</tr>
+<tr>
+<td>Length</td>
+<td style="text-align: center;">400 – 500 um</td>
+<td style="text-align: center;">350 um</td>
+</tr>
+<tr>
+<td>Mesa width</td>
+<td style="text-align: center;">12 um</td>
+<td style="text-align: center;">10 um</td>
+</tr>
+<tr>
+<td>RIB width</td>
+<td style="text-align: center;">0.4 – 0.6 um</td>
+<td style="text-align: center;">0.4 – 0.6 um</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Device Library — SOA sheet</em></p>
+<h3 id="ge-waveguide-photodetector-wb">Ge Waveguide Photodetector
+(WB)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCell</td>
+<td>GePDwithOutput</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>0 – 80 C</td>
+</tr>
+<tr>
+<td>Wavelength</td>
+<td>1260 – 1340 nm</td>
+</tr>
+<tr>
+<td>Operating voltage</td>
+<td>-1 to -0.8 V (recommended -1.5 V)</td>
+</tr>
+<tr>
+<td>Responsivity (LSL)</td>
+<td>&gt;= 0.8 A/W</td>
+</tr>
+<tr>
+<td>Dark current (USL)</td>
+<td>&lt;= 1 uA</td>
+</tr>
+<tr>
+<td>EOL dark current</td>
+<td>2 uA @ -1.5 V</td>
+</tr>
+<tr>
+<td>Ge mesa width</td>
+<td>3 – 4 um</td>
+</tr>
+<tr>
+<td>Ge mesa length</td>
+<td>20 – 50 um</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Statistical data:</strong></p>
+<table>
+<colgroup>
+<col style="width: 54%" />
+<col style="width: 5%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>LSL</th>
+<th>Median</th>
+<th>Sigma</th>
+<th>USL</th>
+<th>Cpk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Responsivity @ -1.5V 80C (A/W)</td>
+<td>0.8</td>
+<td>0.95</td>
+<td>0.03</td>
+<td>—</td>
+<td>1.66</td>
+</tr>
+<tr>
+<td>Dark current @ -1.5V 25C (A)</td>
+<td>—</td>
+<td>1.69e-7</td>
+<td>4.44e-8</td>
+<td>1e-6</td>
+<td>6.24</td>
+</tr>
+<tr>
+<td>R_series (Ohm)</td>
+<td>—</td>
+<td>10.88</td>
+<td>13.3</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Capacitance @ -1.5V (fF)</td>
+<td>—</td>
+<td>54.2</td>
+<td>5</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3dB bandwidth (GHz)</td>
+<td>—</td>
+<td>~40</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Device Library, Customer Cell Offerings</em></p>
+<h3 id="iii-v-waveguide-photodetector-bb">III-V Waveguide Photodetector
+(BB)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cell type</td>
+<td>Black Box</td>
+</tr>
+<tr>
+<td>Operating voltage</td>
+<td>Recommended -1.5 V (max exposure spec’d)</td>
+</tr>
+<tr>
+<td>Specs provided</td>
+<td>Responsivity, dark current</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>Max I_dark @ max V_op @ 10 years</td>
+</tr>
+</tbody>
+</table>
+<p>Statistical data not yet available.</p>
+<p><em>Source: Customer Cell Offerings</em></p>
+<h3 id="twe-mach-zehnder-modulator-wb">TWE Mach-Zehnder Modulator
+(WB)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">200G/lane</th>
+<th style="text-align: center;">100G/lane</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCell</td>
+<td style="text-align: center;">MZM_2FR4_CH8</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Active length</td>
+<td style="text-align: center;">2.35 mm</td>
+<td style="text-align: center;">2.97 mm</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td style="text-align: center;">0 – 80 C</td>
+<td style="text-align: center;">0 – 80 C</td>
+</tr>
+<tr>
+<td>Impedance</td>
+<td style="text-align: center;">28 – 30 Ohm (typ)</td>
+<td style="text-align: center;">45 Ohm (typ)</td>
+</tr>
+<tr>
+<td>V_pi * L</td>
+<td style="text-align: center;">2.35 – 2.6 V*cm</td>
+<td style="text-align: center;">1.91 V*cm (typ)</td>
+</tr>
+<tr>
+<td>Insertion loss</td>
+<td style="text-align: center;">4.2 – 6 dB/cm</td>
+<td style="text-align: center;">6.7 dB/cm (typ)</td>
+</tr>
+<tr>
+<td>E/O bandwidth</td>
+<td style="text-align: center;">42 – 45 GHz</td>
+<td style="text-align: center;">32 GHz (typ)</td>
+</tr>
+<tr>
+<td>V_bias</td>
+<td style="text-align: center;">&gt;= -3.5 V</td>
+<td style="text-align: center;">&gt;= -3.5 V</td>
+</tr>
+<tr>
+<td>V_pp</td>
+<td style="text-align: center;">3.2 – 3.5 V</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+<p>E/O BW calculated with R_term = 90%.</p>
+<p><em>Source: Device Library — TWE MZI sheet. Note: TWE MZI is not listed in the Customer Cell Offerings PDK 1.0 catalog. Availability in the current PDK should be confirmed with IFS.</em></p>
+<h3 id="variable-optical-attenuator-wb">Variable Optical Attenuator
+(WB)</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 21%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Spec</th>
+<th>Statistical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Length (POR)</td>
+<td>500 um</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Width (POR)</td>
+<td>46 um</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>0 – 80 C</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Wavelength</td>
+<td>1264 – 1338 nm</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Loss/VOA @ 1310 (no bias)</td>
+<td>—</td>
+<td>Median ~0 (too low to measure)</td>
+</tr>
+<tr>
+<td>Max attenuation</td>
+<td>USL: 25 dB</td>
+<td>Cpk &gt;&gt; 1.33</td>
+</tr>
+<tr>
+<td>DC power @ max atten</td>
+<td>USL: 30 mW</td>
+<td>Needs validation</td>
+</tr>
+<tr>
+<td>Resistance shift @ 10 yrs</td>
+<td>USL: 10%</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Device Library, Customer Cell Offerings</em></p>
+<h3 id="linear-heater-phase-shifter-wb">Linear Heater / Phase Shifter
+(WB)</h3>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">Z200 (200 nm Si)</th>
+<th style="text-align: center;">Z400 (100 um, 2.2 um)</th>
+<th style="text-align: center;">Z400 (50 um, 1.7 um)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loss/heater (USL)</td>
+<td style="text-align: center;">0.15 dB</td>
+<td style="text-align: center;">0.15 dB</td>
+<td style="text-align: center;">0.15 dB</td>
+</tr>
+<tr>
+<td>Tuning range (USL)</td>
+<td style="text-align: center;">1.5 pi</td>
+<td style="text-align: center;">1.5 pi</td>
+<td style="text-align: center;">1 pi</td>
+</tr>
+<tr>
+<td>Power/pi (USL)</td>
+<td style="text-align: center;">10 mW</td>
+<td style="text-align: center;">10 mW</td>
+<td style="text-align: center;">10 mW</td>
+</tr>
+<tr>
+<td>R_series @ 0.2A (median +/- sigma)</td>
+<td style="text-align: center;">145.2 +/- 9.2 Ohm</td>
+<td style="text-align: center;">144.8 +/- 15.6 Ohm</td>
+<td style="text-align: center;">91.1 +/- 4.4 Ohm</td>
+</tr>
+<tr>
+<td>Resistance drift @ 10 yrs (USL)</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">10%</td>
+</tr>
+<tr>
+<td>Max current density</td>
+<td style="text-align: center;">7.9e6 A/cm2</td>
+<td style="text-align: center;">7.9e6 A/cm2</td>
+<td style="text-align: center;">7.9e6 A/cm2</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Customer Cell Offerings</em></p>
+<h3 id="micro-ring-resonator-with-thermal-phase-shifter-wb">Micro-Ring
+Resonator with Thermal Phase Shifter (WB)</h3>
+<p>Available in 3 design instances. Customer inputs: radius, WG width,
+bus WG width.</p>
+<table>
+<thead>
+<tr>
+<th>Design Instance</th>
+<th style="text-align: center;">Ring R</th>
+<th style="text-align: center;">Bus WG</th>
+<th style="text-align: center;">Ring WG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small ring</td>
+<td style="text-align: center;">3 um</td>
+<td style="text-align: center;">0.4 um</td>
+<td style="text-align: center;">0.4 um</td>
+</tr>
+<tr>
+<td>Medium ring</td>
+<td style="text-align: center;">6 um</td>
+<td style="text-align: center;">0.4 um</td>
+<td style="text-align: center;">1 um</td>
+</tr>
+<tr>
+<td>Large ring</td>
+<td style="text-align: center;">10 um</td>
+<td style="text-align: center;">1 um</td>
+<td style="text-align: center;">0.4 um</td>
+</tr>
+</tbody>
+</table>
+<p>Specs provided per instance: FSR, Notch_Alpha, Notch_Q, Heater Series
+Resistance, Power-Per-Pi. Statistical data not yet populated.</p>
+<p><em>Source: Customer Cell Offerings — MRR sheet</em></p>
+<h3 id="mim-capacitor-wb">MIM Capacitor (WB)</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 20%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Spec</th>
+<th>Statistical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Width</td>
+<td>50 – 350 um</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>50 – 1600 um</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>0 – 80 C</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Operating voltage</td>
+<td>&lt;= 3 V</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Cap density (fF/um2)</td>
+<td>0.46 – 0.50</td>
+<td>Median: 0.454, Sigma: 0.008</td>
+</tr>
+<tr>
+<td>Breakdown voltage</td>
+<td>&gt;= 40 V</td>
+<td>&gt; 100 V (out of sweep range)</td>
+</tr>
+<tr>
+<td>Leakage @ 40V (Ohm)</td>
+<td>USL: 1.5e-8</td>
+<td>All below noise floor (Cpk &gt;&gt; 2)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Device Library, Customer Cell Offerings</em></p>
+<h3 id="silicon-resistor-wb">Silicon Resistor (WB)</h3>
+<p>Sheet resistance (Ohm/sq):</p>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Resistor Type</th>
+<th style="text-align: center;">Junction 1 (median +/- sigma)</th>
+<th style="text-align: center;">Junction 2 (median +/- sigma)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N-type Z400</td>
+<td style="text-align: center;">13.2 +/- 0.31</td>
+<td style="text-align: center;">20.6 +/- 1.77</td>
+</tr>
+<tr>
+<td>N-type Z200</td>
+<td style="text-align: center;">28.5 +/- 0.50</td>
+<td style="text-align: center;">28.4 +/- 1.85</td>
+</tr>
+<tr>
+<td>P-type Z400</td>
+<td style="text-align: center;">26.2 +/- 0.45</td>
+<td style="text-align: center;">41.2 +/- 0.75</td>
+</tr>
+<tr>
+<td>P-type Z200</td>
+<td style="text-align: center;">55.4 +/- 0.64</td>
+<td style="text-align: center;">54.8 +/- 0.68</td>
+</tr>
+</tbody>
+</table>
+<p>Standard junction; altering implants will shift medians.</p>
+<p><em>Source: Customer Cell Offerings</em></p>
+<h3 id="silicon-contact-resistance-wb">Silicon Contact Resistance
+(WB)</h3>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 51%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr>
+<th>Contact Type</th>
+<th style="text-align: center;">R_contact @ 25C (median +/- sigma)</th>
+<th style="text-align: center;">PCM?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Z400 N-type</td>
+<td style="text-align: center;">31.1 +/- 14.2 Ohm</td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td>Z400 P-type</td>
+<td style="text-align: center;">33.5 +/- 9.8 Ohm</td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td>Z200 Thin Epi N-type</td>
+<td style="text-align: center;">26.1 +/- 6.1 Ohm</td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td>Z200 Thin Epi P-type</td>
+<td style="text-align: center;">38.9 +/- 6.7 Ohm</td>
+<td style="text-align: center;">Y</td>
+</tr>
+<tr>
+<td>Z200 Full Height Slab N-type</td>
+<td style="text-align: center;">— (expect similar to Thin Epi)</td>
+<td style="text-align: center;">N</td>
+</tr>
+<tr>
+<td>Z200 Full Height Slab P-type</td>
+<td style="text-align: center;">— (expect similar to Thin Epi)</td>
+<td style="text-align: center;">N</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Customer Cell Offerings</em></p>
+<h3 id="temperature-sensor-diode-wb">Temperature Sensor Diode (WB)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>LSL</th>
+<th>Median</th>
+<th>Sigma</th>
+<th>USL</th>
+<th>Cpk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Power dissipation (mW)</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>1</td>
+<td>&gt;&gt; 1.33</td>
+</tr>
+<tr>
+<td>dV/dT (mV/C)</td>
+<td>1.15</td>
+<td>1.35</td>
+<td>0.015</td>
+<td>1.55</td>
+<td>4.44</td>
+</tr>
+<tr>
+<td>Response time (ms)</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>500</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Changing P/N junction implants will change median and may impact
+Cpk.</p>
+<p><em>Source: Customer Cell Offerings</em></p>
+<h3 id="passive-optical-components">Passive Optical Components</h3>
+<h4 id="waveguide-straight">Waveguide Straight</h4>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">1 um RIB (400/200)</th>
+<th style="text-align: center;">0.4 um RIB (400/200)</th>
+<th style="text-align: center;">0.4 um ET2/RB2 (200/50)</th>
+<th style="text-align: center;">0.4 um Channel (200/0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cell type</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+</tr>
+<tr>
+<td>Width FCCD (mean)</td>
+<td style="text-align: center;">1006 nm</td>
+<td style="text-align: center;">406 nm</td>
+<td style="text-align: center;">415 nm</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Loss (center)</td>
+<td style="text-align: center;">0.2 dB/cm</td>
+<td style="text-align: center;">0.5 dB/cm</td>
+<td style="text-align: center;">1.16 dB/cm</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Loss (max)</td>
+<td style="text-align: center;">0.5 dB/cm</td>
+<td style="text-align: center;">1.1 dB/cm</td>
+<td style="text-align: center;">2 dB/cm</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Back-reflection</td>
+<td style="text-align: center;">-38 dB (5 mm)</td>
+<td style="text-align: center;">-38 dB (5 mm)</td>
+<td style="text-align: center;">-38 dB (5 mm)</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Isolation option</td>
+<td style="text-align: center;">Y/N</td>
+<td style="text-align: center;">Y/N</td>
+<td style="text-align: center;">N/A</td>
+<td style="text-align: center;">Y/N</td>
+</tr>
+<tr>
+<td>Notes</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">"Thin Epi" platform</td>
+<td style="text-align: center;">"Full Height" platform isolation use only</td>
+</tr>
+</tbody>
+</table>
+<p><em>Loss data from Device Library — Other Passives. Cell offerings and isolation options from Customer Cell Offerings.</em></p>
+<h4 id="waveguide-bends">Waveguide Bends</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">0.4 um WG Bend</th>
+<th style="text-align: center;">1 um WG Bend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Min bend radius</td>
+<td style="text-align: center;">70 um</td>
+<td style="text-align: center;">40 um</td>
+</tr>
+<tr>
+<td>Euler bend ratio</td>
+<td style="text-align: center;">0.7</td>
+<td style="text-align: center;">0.5</td>
+</tr>
+<tr>
+<td>Loss (center)</td>
+<td style="text-align: center;">0.02 dB/bend</td>
+<td style="text-align: center;">0.006 dB/bend</td>
+</tr>
+<tr>
+<td>Loss (max)</td>
+<td style="text-align: center;">0.14 dB/bend</td>
+<td style="text-align: center;">0.05 dB/bend</td>
+</tr>
+</tbody>
+</table>
+<p class="source"><em>Source: Device Library — Other Passives</em></p>
+<h4 id="couplers-splitters">Couplers / Splitters</h4>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">Tap 2%</th>
+<th style="text-align: center;">Tap 5%</th>
+<th style="text-align: center;">Tap 8%</th>
+<th style="text-align: center;">2x2 MMI</th>
+<th style="text-align: center;">1x2 MMI</th>
+<th style="text-align: center;">aMMI 20%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cell type</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+</tr>
+<tr>
+<td>Gap (drawn/mean)</td>
+<td style="text-align: center;">710 nm</td>
+<td style="text-align: center;">620 nm</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Width (mean)</td>
+<td style="text-align: center;">5.046 um</td>
+<td style="text-align: center;">5.046 um</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">5.046 um</td>
+<td style="text-align: center;">5.065 um</td>
+<td style="text-align: center;">5.046 um</td>
+</tr>
+<tr>
+<td>Length</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">130 um</td>
+<td style="text-align: center;">32.5 um</td>
+<td style="text-align: center;">76.8 um</td>
+</tr>
+<tr>
+<td>Loss (center)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">0.1 dB</td>
+<td style="text-align: center;">0.1 dB</td>
+<td style="text-align: center;">0.1 dB</td>
+</tr>
+<tr>
+<td>Loss (max)</td>
+<td style="text-align: center;">1.4 dB</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">0.2 dB</td>
+<td style="text-align: center;">0.2 dB</td>
+<td style="text-align: center;">0.2 dB</td>
+</tr>
+<tr>
+<td>Split ratio (center)</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">5%</td>
+<td style="text-align: center;">8%</td>
+<td style="text-align: center;">50%</td>
+<td style="text-align: center;">50%</td>
+<td style="text-align: center;">20%</td>
+</tr>
+<tr>
+<td>Split ratio range</td>
+<td style="text-align: center;">1.4 – 2.6%</td>
+<td style="text-align: center;">3.8 – 6.2%</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">48 – 52%</td>
+<td style="text-align: center;">48 – 52%</td>
+<td style="text-align: center;">18 – 22%</td>
+</tr>
+<tr>
+<td>Back-reflection</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">-40 dB</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">-44 dB</td>
+<td style="text-align: center;">-44.5 dB</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tap 2%/5% data from Device Library — Other Passives. Tap 8% listed in Customer Cell Offerings (no performance data yet). MMI/aMMI data from Device Library — Other Passives.</em></p>
+<h4 id="platform-tapers-mode-converters">Platform Tapers &amp; Mode
+Converters</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 21%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">ET2-to-RIB Taper</th>
+<th style="text-align: center;">400/200 to 200/0 Taper</th>
+<th style="text-align: center;">RIB 1um-to-0.4um Taper</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PCell</td>
+<td style="text-align: center;">ShallowETTTaper2</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Cell type</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB</td>
+<td style="text-align: center;">WB (loss-less)</td>
+</tr>
+<tr>
+<td>Loss (center)</td>
+<td style="text-align: center;">0.08 dB</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">0 (N/A)</td>
+</tr>
+<tr>
+<td>Loss (max)</td>
+<td style="text-align: center;">0.15 dB</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">0 (N/A)</td>
+</tr>
+<tr>
+<td>Back-reflection</td>
+<td style="text-align: center;">-38 dB</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+<p><em>ET2-to-RIB taper data from Device Library — Other Passives. Other tapers from Customer Cell Offerings.</em></p>
+<h4 id="sin-waveguide-tapers-bb">SiN Waveguide Tapers (BB)</h4>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 36%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">Si-to-HNA SiN</th>
+<th style="text-align: center;">HNA-to-LNA SiN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cell type</td>
+<td style="text-align: center;">Black Box</td>
+<td style="text-align: center;">Black Box</td>
+</tr>
+<tr>
+<td>Input: Polarization</td>
+<td style="text-align: center;">TE or TM</td>
+<td style="text-align: center;">TE or TM</td>
+</tr>
+<tr>
+<td>Specs provided</td>
+<td style="text-align: center;">Loss/taper, back-reflection</td>
+<td style="text-align: center;">Loss/taper, back-reflection</td>
+</tr>
+</tbody>
+</table>
+<p class="source"><em>Source: Customer Cell Offerings</em></p>
+<h4 id="external-couplers">External Couplers</h4>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 21%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">LNA Coupler (BB)</th>
+<th style="text-align: center;">Grating Coupler 1270 (WB)</th>
+<th style="text-align: center;">GC 1290 (WB)</th>
+<th style="text-align: center;">GC 1310 (WB)</th>
+<th style="text-align: center;">GC 1330 (WB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loss (center)</td>
+<td style="text-align: center;">0.4 dB</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+</tr>
+<tr>
+<td>Loss (max)</td>
+<td style="text-align: center;">0.6 dB</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+</tr>
+<tr>
+<td>NA (typ)</td>
+<td style="text-align: center;">0.9 x 0.125</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Back-reflection (typ)</td>
+<td style="text-align: center;">-44 dB</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Customer inputs</td>
+<td style="text-align: center;">Polarization (TE/TM)</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+</tr>
+</tbody>
+</table>
+<p><em>LNA Coupler data from Device Library — Other Passives. Grating Couplers from Customer Cell Offerings.</em></p>
+<h4 id="si-echelle-mux-4-channel-wb">Si Echelle MUX (4-Channel, WB)</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temperature</td>
+<td>0 – 80 C</td>
+</tr>
+<tr>
+<td>Wavelength</td>
+<td>1264 – 1337 nm</td>
+</tr>
+<tr>
+<td>Insertion loss (max)</td>
+<td>3 dB</td>
+</tr>
+<tr>
+<td>1 dB bandwidth</td>
+<td>6 nm</td>
+</tr>
+<tr>
+<td>Adjacent crosstalk</td>
+<td>&gt;= 10 nm separation</td>
+</tr>
+<tr>
+<td>Back-reflection</td>
+<td>-37.5 dB</td>
+</tr>
+<tr>
+<td>Customer input</td>
+<td>Inverted: Y/N</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: Device Library — Other Passives, Customer Cell Offerings</em></p>
+</div>
+<script>
+// Highlight "Available Devices Summary" table
+document.querySelectorAll('.content h3').forEach(h => {
+  if (h.textContent.includes('Available Devices Summary')) {
+    let el = h.nextElementSibling;
+    while (el && el.tagName !== 'TABLE') el = el.nextElementSibling;
+    if (el) el.classList.add('featured');
+  }
+});
+
+// Highlight "Available Devices Summary" in sidebar
+document.querySelectorAll('.sidebar a').forEach(a => {
+  if (a.textContent.includes('Available Devices Summary')) {
+    a.style.fontWeight = '700';
+    a.style.color = '#cf222e';
+  }
+});
+
+// Collapsible TOC
+document.querySelectorAll('.sidebar li').forEach(li => {
+  const sub = li.querySelector(':scope > ul');
+  if (!sub) return;
+  const link = li.querySelector(':scope > a');
+  link.addEventListener('click', e => {
+    if (link.getAttribute('href') === '#') { e.preventDefault(); }
+    li.classList.toggle('collapsed');
+  });
+});
+
+// Scroll-based active highlight
+const links = document.querySelectorAll('.sidebar a');
+const targets = [];
+links.forEach(a => {
+  const id = a.getAttribute('href')?.slice(1);
+  if (id) { const el = document.getElementById(id); if (el) targets.push({a, el}); }
+});
+function onScroll() {
+  let active = targets[0];
+  for (const t of targets) { if (t.el.getBoundingClientRect().top <= 80) active = t; }
+  links.forEach(a => a.classList.remove('active'));
+  if (active) active.a.classList.add('active');
+}
+window.addEventListener('scroll', onScroll);
+onScroll();
+</script>
+</body>
+</html>
