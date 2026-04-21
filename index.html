@@ -315,7 +315,6 @@ id="toc-si-echelle-mux-4-channel-wb">Si Echelle MUX (4-Channel,
 WB)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#known-discrepancies" id="toc-known-discrepancies">Known Discrepancies Across Documents</a></li>
 </ul></nav>
 </div>
 <div class="content">
@@ -2072,7 +2071,6 @@ Converters</h4>
 <p class="source"><em>Source: Customer Cell Offerings</em></p>
 <h4 id="external-couplers">External Couplers</h4>
 <p><strong>LNA Coupler (BB)</strong></p>
-<p>All values measure the full end-to-end coupling chain: Si → HNA SiN taper → LNA SiN taper → facet → fiber.</p>
 <table>
 <thead>
 <tr>
@@ -2099,7 +2097,7 @@ Converters</h4>
 <td>Back Reflection / Coupler (dB)</td>
 <td style="text-align: center;">N/A</td>
 <td style="text-align: center;">-37</td>
-<td style="text-align: center;"><em>3.75</em><sup>1</sup></td>
+<td style="text-align: center;">-3.75</td>
 <td style="text-align: center;">-22</td>
 <td style="text-align: center;">1.33</td>
 <td style="text-align: center;">N</td>
@@ -2133,9 +2131,43 @@ Converters</h4>
 </tr>
 </tbody>
 </table>
-<p><sup>1</sup> PDK sheet shows -3.75 (sign artifact); sigma is a magnitude, treat as 3.75 dB. NA values are highly measurement-method dependent. Emission Angle not populated.</p>
-<p><strong>Grating Couplers (WB)</strong> — per-wavelength designs at 1270 / 1290 / 1310 / 1330 nm. Loss spec’d per design. Customer inputs: Pitch, Line Width.</p>
-<p class="source"><em>Source: <strong>Customer Cell Offerings Apr 2026</strong> (LNA data supersedes Device Library Sep 2025 — see Known Discrepancy #10).</em></p>
+<p class="source"><em>Source: Customer Cell Offerings Apr 2026 — Low NA Nitride Coupler sheet. IL and BR values include HNA SiN taper + LNA SiN taper + facet. BR sigma value -3.75 is a sheet artifact — treat as |3.75| dB. NA values highly dependent on measurement method.</em></p>
+<p><strong>Grating Couplers (WB)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">GC 1270</th>
+<th style="text-align: center;">GC 1290</th>
+<th style="text-align: center;">GC 1310</th>
+<th style="text-align: center;">GC 1330</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loss (center)</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+</tr>
+<tr>
+<td>Loss (max)</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+<td style="text-align: center;">spec’d</td>
+</tr>
+<tr>
+<td>Customer inputs</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+<td style="text-align: center;">Pitch, Line Width</td>
+</tr>
+</tbody>
+</table>
+<p class="source"><em>Source: Customer Cell Offerings — Grating Coupler sheets.</em></p>
 <h4 id="si-echelle-mux-4-channel-wb">Si Echelle MUX (4-Channel, WB)</h4>
 <table>
 <thead>
@@ -2176,104 +2208,6 @@ Converters</h4>
 </tbody>
 </table>
 <p><em>Source: Device Library — Other Passives, Customer Cell Offerings</em></p>
-
-<hr/>
-<h2 id="known-discrepancies">Known Discrepancies Across Documents</h2>
-<p>Items marked <strong>ACTION</strong> should be clarified with IFS.</p>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>Parameter</th>
-<th>Doc A</th>
-<th>Doc B</th>
-<th>Delta</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>RIB WG height</td>
-<td>Component Overview Apr 26: <strong>386</strong> +/- 1.5 nm (1035 wafers)</td>
-<td>Generic Laser PDK: <strong>391</strong> +/- 1.7 nm (866 wafers)</td>
-<td>~5 nm</td>
-<td>Likely different fab lots. Component Overview has larger dataset.</td>
-</tr>
-<tr>
-<td>2</td>
-<td>RIB slab height</td>
-<td>Component Overview Apr 26: <strong>197</strong> +/- 2.1 nm</td>
-<td>Generic Laser PDK: <strong>202</strong> +/- 2.5 nm</td>
-<td>~5 nm</td>
-<td>Same as above.</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Si contact R (Z400)</td>
-<td>Device Library Sep 25: PPL <strong>99.9</strong>, NPL <strong>86.4</strong> Ohm ("5 sigma")</td>
-<td>Cell Offerings Apr 26: N-type median <strong>31.1</strong> +/- 14.2, P-type <strong>33.5</strong> +/- 9.8 Ohm</td>
-<td>see note</td>
-<td>Device Library 5σ ≈ Cell Offerings median+5σ (e.g. 31.1+71=102 ≈ 99.9). Likely same data, different representation. <strong>Use Cell Offerings (newer, has distribution).</strong></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Si contact R (Z200)</td>
-<td>Device Library Sep 25: "Z200 on RIB" PPL <strong>86.1</strong>, NPL <strong>74.6</strong> Ohm</td>
-<td>Cell Offerings Apr 26: "Z200 Thin Epi" N-type <strong>26.1</strong> +/- 6.1, P-type <strong>38.9</strong> +/- 6.7 Ohm</td>
-<td>different platform</td>
-<td><strong>Not comparable</strong> — Device Library measures Z200 on 400/200 RIB slab; Cell Offerings measures Z200 on 200/50 ET2 ("Thin Epi"). Cell Offerings also lists "Z200 Full Height Slab" as not yet measured.</td>
-</tr>
-<tr>
-<td>5</td>
-<td>MIMCAP breakdown</td>
-<td>Device Library Sep 25: &gt;= <strong>40 V</strong></td>
-<td>Cell Offerings Apr 26: &gt; <strong>100 V</strong></td>
-<td>2.5x</td>
-<td>Cell Offerings: "out of sweep range". Device Library used wrong area. <strong>Use Cell Offerings.</strong></td>
-</tr>
-<tr>
-<td>6</td>
-<td>MIMCAP cap density</td>
-<td>Device Library Sep 25: <strong>0.46 – 0.50</strong> fF/um2</td>
-<td>Cell Offerings Apr 26: median <strong>0.454</strong>, sigma 0.008</td>
-<td>—</td>
-<td>Cell Offerings notes area calc error pending revision. <strong>Use with caution.</strong></td>
-</tr>
-<tr>
-<td>7</td>
-<td>Temp diode response time</td>
-<td>Device Library Sep 25: &lt;= 500 <strong>us</strong></td>
-<td>Cell Offerings Apr 26: USL 500 <strong>ms</strong></td>
-<td>1000x</td>
-<td><strong>ACTION</strong> — Unit mismatch (us vs ms).</td>
-</tr>
-<tr>
-<td>8</td>
-<td>VOA DC power @ max atten</td>
-<td>Device Library Sep 25: <strong>75 mW</strong> (typ)</td>
-<td>Cell Offerings Apr 26: USL <strong>30 mW</strong></td>
-<td>2.5x</td>
-<td>Cell Offerings flags "Needs validation". <strong>ACTION</strong> — Confirm.</td>
-</tr>
-<tr>
-<td>9</td>
-<td>Grating depth (same doc)</td>
-<td>Drawn target: <strong>32 nm</strong></td>
-<td>Measured: <strong>~26 nm</strong> +/- 1.4 nm</td>
-<td>6 nm</td>
-<td>Not a conflict — 32 nm is design intent, 26 nm is fab result. Use measured value for modeling.</td>
-</tr>
-<tr>
-<td>10</td>
-<td>LNA Coupler insertion loss</td>
-<td>Device Library Sep 25: center <strong>0.4 dB</strong>, max <strong>0.6 dB</strong> (coupler only)</td>
-<td>Cell Offerings Apr 26: median <strong>0.85 dB</strong>, σ 0.29, USL <strong>2.30 dB</strong> (includes HNA + LNA taper + facet)</td>
-<td>~2.1x median, ~3.8x max</td>
-<td><strong>Not a conflict</strong> — Cell Offerings measures end-to-end Si-to-fiber chain (HNA SiN taper + LNA SiN taper + facet), Device Library measures coupler element alone. <strong>Use Cell Offerings for link budget</strong> (it reflects actual TP-to-fiber loss).</td>
-</tr>
-</tbody>
-</table>
 </div>
 <script>
 // Highlight "Available Devices Summary" table
