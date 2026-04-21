@@ -960,7 +960,7 @@ available.</p>
 <td>LNA Coupler</td>
 <td style="text-align: center;">BB</td>
 <td>—</td>
-<td>Loss 0.4 dB, NA 0.9x0.125</td>
+<td>IL 0.85 dB median (σ 0.29, USL 2.30 dB), NA 0.09 × 0.14, incl. SiN taper chain</td>
 </tr>
 <tr>
 <td></td>
@@ -2070,29 +2070,87 @@ Converters</h4>
 </table>
 <p class="source"><em>Source: Customer Cell Offerings</em></p>
 <h4 id="external-couplers">External Couplers</h4>
+<p><strong>LNA Coupler (BB) — Customer Cell Offerings Apr 2026 (includes HNA taper + LNA taper + facet)</strong></p>
 <table>
-<colgroup>
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 21%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-</colgroup>
 <thead>
 <tr>
 <th>Parameter</th>
-<th style="text-align: center;">LNA Coupler (BB)</th>
-<th style="text-align: center;">Grating Coupler 1270 (WB)</th>
-<th style="text-align: center;">GC 1290 (WB)</th>
-<th style="text-align: center;">GC 1310 (WB)</th>
-<th style="text-align: center;">GC 1330 (WB)</th>
+<th style="text-align: center;">LSL</th>
+<th style="text-align: center;">Median</th>
+<th style="text-align: center;">Sigma</th>
+<th style="text-align: center;">USL</th>
+<th style="text-align: center;">Cpk</th>
+<th style="text-align: center;">PCM</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Insertion Loss / Coupler (dB)</td>
+<td style="text-align: center;">N/A</td>
+<td style="text-align: center;"><strong>0.85</strong></td>
+<td style="text-align: center;">0.29</td>
+<td style="text-align: center;"><strong>2.30</strong></td>
+<td style="text-align: center;">1.66</td>
+<td style="text-align: center;">Y</td>
+<td>End-to-end: Si → HNA SiN → LNA SiN → facet → fiber</td>
+</tr>
+<tr>
+<td>Back Reflection / Coupler (dB)</td>
+<td style="text-align: center;">N/A</td>
+<td style="text-align: center;">-37</td>
+<td style="text-align: center;"><em>-3.75</em></td>
+<td style="text-align: center;">-22</td>
+<td style="text-align: center;">1.33</td>
+<td style="text-align: center;">N</td>
+<td>Sigma sign is a PDK sheet artifact; treat as |3.75| dB</td>
+</tr>
+<tr>
+<td>Horizontal NA</td>
+<td style="text-align: center;">N/A</td>
+<td style="text-align: center;">0.09</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">0.11</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">Y</td>
+<td>Highly dependent on measurement method</td>
+</tr>
+<tr>
+<td>Vertical NA</td>
+<td style="text-align: center;">N/A</td>
+<td style="text-align: center;">0.14</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">0.15</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">Y</td>
+<td>Highly dependent on measurement method</td>
+</tr>
+<tr>
+<td>Emission Angle</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td>Not populated</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Grating Couplers (WB) — per-wavelength designs</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th style="text-align: center;">GC 1270</th>
+<th style="text-align: center;">GC 1290</th>
+<th style="text-align: center;">GC 1310</th>
+<th style="text-align: center;">GC 1330</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Loss (center)</td>
-<td style="text-align: center;">0.4 dB</td>
 <td style="text-align: center;">spec’d</td>
 <td style="text-align: center;">spec’d</td>
 <td style="text-align: center;">spec’d</td>
@@ -2100,31 +2158,13 @@ Converters</h4>
 </tr>
 <tr>
 <td>Loss (max)</td>
-<td style="text-align: center;">0.6 dB</td>
 <td style="text-align: center;">spec’d</td>
 <td style="text-align: center;">spec’d</td>
 <td style="text-align: center;">spec’d</td>
 <td style="text-align: center;">spec’d</td>
-</tr>
-<tr>
-<td>NA (typ)</td>
-<td style="text-align: center;">0.9 x 0.125</td>
-<td style="text-align: center;">—</td>
-<td style="text-align: center;">—</td>
-<td style="text-align: center;">—</td>
-<td style="text-align: center;">—</td>
-</tr>
-<tr>
-<td>Back-reflection (typ)</td>
-<td style="text-align: center;">-44 dB</td>
-<td style="text-align: center;">—</td>
-<td style="text-align: center;">—</td>
-<td style="text-align: center;">—</td>
-<td style="text-align: center;">—</td>
 </tr>
 <tr>
 <td>Customer inputs</td>
-<td style="text-align: center;">Polarization (TE/TM)</td>
 <td style="text-align: center;">Pitch, Line Width</td>
 <td style="text-align: center;">Pitch, Line Width</td>
 <td style="text-align: center;">Pitch, Line Width</td>
@@ -2132,7 +2172,7 @@ Converters</h4>
 </tr>
 </tbody>
 </table>
-<p><em>LNA Coupler data from Device Library — Other Passives. Grating Couplers from Customer Cell Offerings.</em></p>
+<p><em>LNA Coupler data from <strong>Customer Cell Offerings Apr 2026</strong> (supersedes Device Library Sep 2025 — see Known Discrepancy #10). Grating Couplers from Customer Cell Offerings.</em></p>
 <h4 id="si-echelle-mux-4-channel-wb">Si Echelle MUX (4-Channel, WB)</h4>
 <table>
 <thead>
